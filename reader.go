@@ -1,6 +1,32 @@
+// Package wireread provides high-performance readers for binary wire protocol data.
+//
+// This package offers two implementations of the Reader interface:
+//   - SafeReader: Complete boundary checking with detailed error handling
+//   - FastReader: Zero-overhead parsing for pre-validated data frames
+//
+// Both implementations support reading various data types in different endianness
+// (big-endian and little-endian), including integers, strings, variable-length
+// integers, and protocol-specific formats like MySQL length-encoded integers.
+//
+// Example usage with SafeReader:
+//
+//	data := []byte{0x00, 0x01, 0x02, 0x03}
+//	reader := wireread.NewSafeReader(data)
+//	value, err := reader.ReadUint16BE()
+//	if err != nil {
+//	    log.Fatal(err)
+//	}
+//
+// Example usage with FastReader:
+//
+//	data := []byte{0x00, 0x01, 0x02, 0x03}
+//	reader := wireread.NewFastReader(data)
+//	value, _ := reader.ReadUint16BE() // No error checking for performance
 package wireread
 
-// Reader defines the interface for reading wire protocol data
+// Reader defines the interface for reading wire protocol data.
+// It provides methods for reading various data types from a byte buffer
+// with support for different byte orders and protocol-specific formats.
 type Reader interface {
 	// Bytes returns the remaining unparsed bytes from the current read position
 	Bytes() []byte
